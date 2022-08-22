@@ -64,7 +64,7 @@ export class NewtonsMethodSolver {
 
     try {
       do {
-        if (options.debug) console.log(`Iteration ${ iterations.length }`);
+        if (options.debug) console.log(`iteration ${ iterations.length }`);
 
         y = fn(x);
 
@@ -77,39 +77,32 @@ export class NewtonsMethodSolver {
 
         iterations.push({ x, y, tangent });
 
-        if (isNaN(y) || typeof y === 'undefined') {
-          return {
-            status: SolverStatus.Error,
-            error: new Error(`NaN or undefined with x = ${ x }`),
-            iterations,
-          };
-        }
+        // Result is undefined or NaN
+        if (isNaN(y) || typeof y === 'undefined') return {
+          status: SolverStatus.Error,
+          error: new Error(`NaN or undefined with x = ${ x }`),
+          iterations,
+        };
 
         // Exact match
-        if (y === 0) {
-          return {
-            status: SolverStatus.ExactSolutionFound,
-            result: x,
-            iterations,
-          };
-        }
+        if (y === 0) return {
+          status: SolverStatus.ExactSolutionFound,
+          result: x,
+          iterations,
+        };
 
         // Solution within precision
-        if (Math.abs(y) < options.targetPrecision) {
-          return {
-            status: SolverStatus.SolutionWithinPrecision,
-            result: x,
-            iterations,
-          };
-        }
+        if (Math.abs(y) < options.targetPrecision) return {
+          status: SolverStatus.SolutionWithinPrecision,
+          result: x,
+          iterations,
+        };
 
         // Tangent is 0, extremum found
-        if (tangent === 0) {
-          return {
-            status: SolverStatus.ExtremumFound,
-            iterations,
-          };
-        }
+        if (tangent === 0) return {
+          status: SolverStatus.ExtremumFound,
+          iterations,
+        };
 
       } while (iterations.length < options.maxIterations);
 
@@ -130,8 +123,8 @@ export class NewtonsMethodSolver {
   /**
    *
    * @param fn {Function} The function f(x) to solve for.
-   * @param value {number}
-   * @param delta {number}
+   * @param value {number} The current value of x.
+   * @param delta {number} The delta to use when calculating the derivative.
    * @private
    */
   private static derivative(
