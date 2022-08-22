@@ -1,0 +1,19 @@
+{
+  "name": "newtons_method_solver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.18.6",
+    "@types/jest": "^28.1.7",
+    "mathjs": "^11.0.1",
+    "ts-jest": "^28.0.8",
+    "ts-node": "^10.9.1"
+  }
+}
