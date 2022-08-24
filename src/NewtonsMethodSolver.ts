@@ -132,9 +132,7 @@ export class NewtonsMethodSolver {
     value: number,
     delta: number = 0.001,
   ): number {
-    return (
-      fn(value + delta) - fn(value)
-    ) / delta;
+    return (fn(value + delta) - fn(value)) / delta;
   }
 
 }
