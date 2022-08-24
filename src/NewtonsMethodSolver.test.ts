@@ -23,7 +23,7 @@ for (const { fn, tests } of [
   {
     fn: 'h(x) = (x^2+2)/(x^3-2x+4)-(e^(2x)-x^(1/3))/(4x-8x^2)-4',
     tests: [
-      // Skip the not real numbers
+      // Skip the complex numbers
       // { x0: -1.8, zeroPoint: -1.85004 },
       // { x0: -0.2, zeroPoint: -0.07877 },
       { x0: 0.7, zeroPoint: 0.67389 },
