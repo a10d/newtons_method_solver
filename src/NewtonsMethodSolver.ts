@@ -24,7 +24,7 @@ export interface SolverResult {
 export interface SolverIteration {
   x: number;
   y: number;
-  tangent: number;
+  slope: number;
 }
 
 export class NewtonsMethodSolver {
@@ -68,14 +68,12 @@ export class NewtonsMethodSolver {
 
         y = fn(x);
 
-        let tangent = this.derivative(fn, x, options.tangentDelta);
+        let slope = this.slope(fn, x, options.tangentDelta);
 
         if (options.debug) console.log(`f(${ x }) = ${ y }`);
-        if (options.debug) console.log(`tangent = ${ tangent }`);
+        if (options.debug) console.log(`slope = ${ slope }`);
 
-        x = x - y / tangent;
-
-        iterations.push({ x, y, tangent });
+        iterations.push({ x, y, slope });
 
         // Result is undefined or NaN
         if (isNaN(y) || typeof y === 'undefined') return {
@@ -98,11 +96,13 @@ export class NewtonsMethodSolver {
           iterations,
         };
 
-        // Tangent is 0, extremum found
-        if (tangent === 0) return {
+        // Slope is 0, extremum found
+        if (slope === 0) return {
           status: SolverStatus.ExtremumFound,
           iterations,
         };
+
+        x = x - y / slope;
 
       } while (iterations.length < options.maxIterations);
 
@@ -124,10 +124,10 @@ export class NewtonsMethodSolver {
    *
    * @param fn {Function} The function f(x) to solve for.
    * @param value {number} The current value of x.
-   * @param delta {number} The delta to use when calculating the derivative.
+   * @param delta {number} The delta to use when calculating the slope.
    * @private
    */
-  private static derivative(
+  private static slope(
     fn: Function,
     value: number,
     delta: number = 0.001,
