@@ -1,9 +1,8 @@
 export interface SolverOptions {
   x0: number;
   targetPrecision?: number;
-  tangentDelta?: number;
+  slopeDelta?: number;
   maxIterations?: number;
-  debug?: Boolean;
 }
 
 export enum SolverStatus {
@@ -36,10 +35,9 @@ export class NewtonsMethodSolver {
    */
   private static defaultOptions: SolverOptions = {
     x0: 0,
-    targetPrecision: 1 / 10 ** 10,
-    tangentDelta: 1 / 10 ** 8,
+    targetPrecision: 10 ** -10,
+    slopeDelta: 10 ** -8,
     maxIterations: 10 ** 3,
-    debug: false,
   };
 
   /**
@@ -58,20 +56,15 @@ export class NewtonsMethodSolver {
     };
 
     let iterations: SolverIteration[] = [];
-    let x = options.x0;
+    let x: number = options.x0;
 
-    let y;
+    let y: number;
+    let slope: number;
 
     try {
       do {
-        if (options.debug) console.log(`iteration ${ iterations.length }`);
-
         y = fn(x);
-
-        let slope = this.slope(fn, x, options.tangentDelta);
-
-        if (options.debug) console.log(`f(${ x }) = ${ y }`);
-        if (options.debug) console.log(`slope = ${ slope }`);
+        slope = this.slope(fn, x, options.slopeDelta);
 
         iterations.push({ x, y, slope });
 
@@ -130,7 +123,7 @@ export class NewtonsMethodSolver {
   private static slope(
     fn: Function,
     value: number,
-    delta: number = 0.001,
+    delta: number,
   ): number {
     return (fn(value + delta) - fn(value)) / delta;
   }

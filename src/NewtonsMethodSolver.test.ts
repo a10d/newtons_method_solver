@@ -45,19 +45,23 @@ for (const { fn, tests } of [
 
   for (const { x0, zeroPoint } of tests) {
 
-    test(`${ fn }${ ' '.repeat(54 - fn.length) } | x0 = ${ x0 }${ ' '.repeat( 3 - x0.toString().length)} | 0 at ~ ${zeroPoint} |`, () => {
-      const maxIterations = 100;
+    test(
+      `${ fn }${ ' '.repeat(54 - fn.length) } | x0 = ${ x0 }${ ' '.repeat(3 - x0.toString().length) } | 0 at ~ ${ zeroPoint } |`,
+      () => {
+        const maxIterations = 100;
 
-      const evaluation = NewtonsMethodSolver.solve(fx, { x0, maxIterations });
+        const evaluation = NewtonsMethodSolver.solve(fx, { x0, maxIterations });
 
-      expect(evaluation).not.toHaveProperty('error');
-      expect(evaluation.result).toBeCloseTo(zeroPoint, 5);
+        expect(evaluation).not.toHaveProperty('error');
+        expect(evaluation.result).toBeCloseTo(zeroPoint, 5);
 
-      expect(evaluation.result).not.toBeNaN();
-      expect(evaluation.result).not.toBeUndefined();
+        expect(evaluation.result).not.toBeNaN();
+        expect(evaluation.result).not.toBeUndefined();
 
-      expect(evaluation.iterations.length).toBeLessThanOrEqual(maxIterations);
-    });
+        expect(evaluation.iterations.length).toBeLessThanOrEqual(maxIterations);
+
+      },
+    );
   }
 
 }
